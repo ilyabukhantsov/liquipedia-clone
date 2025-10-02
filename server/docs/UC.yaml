@@ -1,0 +1,316 @@
+openapi: 3.0.3
+info:
+  title: Player & Team API
+  version: 0.0.1
+servers:
+  - url: http://localhost:8000/api/
+    description: Dev server
+
+paths:
+  /players:
+    get:
+      summary: Get all players
+      tags:
+        - Players
+      operationId: getAllPlayers
+      responses:
+        "200":
+          description: List of players
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Player"
+        "default":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a new player
+      tags:
+        - Players
+      operationId: addPlayer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Player"
+      responses:
+        "201":
+          description: Recently added player
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+        "default":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /players/{player_id}:
+    get:
+      summary: Get one player by id
+      tags:
+        - Players
+      operationId: getPlayerById
+      parameters:
+        - name: player_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Player data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+        "default":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    patch:
+      summary: Update player data
+      tags:
+        - Players
+      operationId: updatePlayer
+      parameters:
+        - name: player_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Player"
+      responses:
+        "200":
+          description: Player updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+        "default":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      summary: Delete player by id
+      tags:
+        - Players
+      operationId: deletePlayer
+      parameters:
+        - name: player_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Player deleted successfully
+        "default":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /teams:
+    get:
+      summary: Get all teams
+      tags:
+        - Teams
+      operationId: getAllTeams
+      responses:
+        "200":
+          description: List of teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Team"
+        "default":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a new team
+      tags:
+        - Teams
+      operationId: addTeam
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Team"
+      responses:
+        "201":
+          description: Recently added team
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+        "default":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /teams/{team_id}:
+    get:
+      summary: Get one team by id
+      tags:
+        - Teams
+      operationId: getTeamById
+      parameters:
+        - name: team_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Team data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+        "default":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    patch:
+      summary: Update team data
+      tags:
+        - Teams
+      operationId: updateTeam
+      parameters:
+        - name: team_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Team"
+      responses:
+        "200":
+          description: Team updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+        "default":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      summary: Delete team by id
+      tags:
+        - Teams
+      operationId: deleteTeam
+      parameters:
+        - name: team_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Team deleted successfully
+        "default":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Player:
+      type: object
+      required:
+        - nickName
+        - birthDate
+      properties:
+        id:
+          type: integer
+          example: 1
+        nickName:
+          type: string
+          example: Mon0kson
+        birthDate:
+          type: string
+          format: date
+          example: 2005-07-28
+        team:
+          type: string
+          nullable: true
+          example: Sila4i
+        avatar:
+          type: string
+          format: binary
+          nullable: true
+          description: The binary content of the file. Can be null if no file is provided.
+    Team:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Sila4i
+        roster:
+          type: array
+          items:
+            $ref: "#/components/schemas/Player"
+        logo:
+          type: string
+          format: binary
+          nullable: true
+          description: The binary content of the file. Can be null if no file is provided.
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad request
